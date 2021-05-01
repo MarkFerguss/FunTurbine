@@ -73,5 +73,3 @@ function cChunk(n)
     sleep(1)
   end
 end
- 
-parallel.waitForAll(cChunk(1),cChunk(2),cChunk(3))

@@ -30,9 +30,6 @@ for i=1,nT do
     f.centerText(t[i],1,"Turbine "..i,"yellow")
   end}
   j,k = t[i].size[1],t[i].size[2]
-  t[i].box = f.addWin(t[i],3,3,j-5,10)
-  t[i].b1 = f.addWin(t[i],3,14,4,1)
-  t[i].b2 = f.addWin(t[i],11,14,4,1)
   t[i].box.reset = {bg_color="gray",printText = function()
     f.cprint(t[i].box,1,1,"Status: ","white","gray")
     f.cprint(t[i].box,16,1,"I: ","white","gray")
@@ -71,10 +68,29 @@ for i=1,nT do
     f.centerTextRight(t[i].box,9,dT[i].getFluidFlowRate.." mb/t","lightBlue","gray")
     f.centerTextRight(t[i].box,10,tostring(dT[i].turbineID),"yellow","gray")
   end}
+  t[i].turnOn = function() rednet.broadcast("turnOn",i) end
+  t[i].turnOff = function() rednet.broadcast("turnOff",i) end
+  t[i].InductorOn = function() rednet.broadcast("inductorOn",i) end
+  t[i].InductorOff = function() rednet.broadcast("inductorOff",i) end
+  t[i].box = f.addWin(t[i],3,3,j-5,10)
+  t[i].b1 = f.addWin(t[i],3,14,4,1)
+  t[i].b2 = f.addWin(t[i],11,14,4,1)
+  t[i].b3 = f.addWin(t[i],19,14,4,1)
+  t[i].b4 = f.addWin(t[i],27,14,4,1)
+  --t[i].b1 = f.addWin(t[i],3,14,4,1)
+  --t[i].b2 = f.addWin(t[i],11,14,4,1)
   t[i].b1.reset = {bg_color="lime"} t[i].b1.pulse = {bg_color="lightBlue"}
   t[i].b1.press = function() if not dT[i].getActive then t[i].b1.apply("pulse") sleep(0.2) t[i].b1.apply("reset") t[i].turnOn() end end
   t[i].b2.reset = {bg_color="red"} t[i].b2.pulse = {bg_color="lightBlue"}
   t[i].b2.press = function() if dT[i].getActive then t[i].b2.apply("pulse") sleep(0.2) t[i].b2.apply("reset") t[i].turnOff() end end
+  t[i].b3.reset = {bg_color="lime"} t[i].b3.pulse = {bg_color="lightBlue"}
+  t[i].b3.press = function() if not dT[i].getInductorEngaged then t[i].b3.apply("pulse") sleep(0.2) t[i].b3.apply("reset") t[i].InductorOn() end end
+  t[i].b4.reset = {bg_color="red"} t[i].b4.pulse = {bg_color="lightBlue"}
+  t[i].b4.press = function() if dT[i].getInductorEngaged then t[i].b4.apply("pulse") sleep(0.2) t[i].b4.apply("reset") t[i].InductorOff() end end
+  --t[i].b5.reset = {bg_color="lime"} t[i].b5.pulse = {bg_color="lightBlue"}
+  --t[i].b5.press = function() if not dT[i].getActive then t[i].b5.apply("pulse") sleep(0.2) t[i].b5.apply("reset") t[i].turnOn() end end
+  --t[i].b6.reset = {bg_color="red"} t[i].b6.pulse = {bg_color="lightBlue"}
+  --t[i].b6.press = function() if dT[i].getActive then t[i].b6.apply("pulse") sleep(0.2) t[i].b6.apply("reset") t[i].turnOff() end end
   t[i].widg1 = f.addWin(t[i],4,h-21,10,10)
   t[i].widg1.reset = {bg_color="black"}
   t[i].tank1 = f.addWin(t[i],3,h-10,5,9)
@@ -97,6 +113,7 @@ for i=1,nT do
     f.cprint(t[i].tank2,2,9-h,h.."B","gray","lightBlue")
     term.redirect(error_box)
   end}
+  t[i].battery = f.addWin(t[i],16,h-10,10,1)
 end
 error_box = f.addWin(m,1,h,w,2)
 

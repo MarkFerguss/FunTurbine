@@ -40,10 +40,10 @@ for i=1,nT do
     f.cprint(t[i].box,1,3,"Generation: ","white","gray")
     f.cprint(t[i].box,1,4,"In battery: ","white","gray")
     f.cprint(t[i].box,1,5,"Optimization: ","white","gray")
-    f.cprint(t[i].box,1,6,"Steam flow: ","white","gray")
-    f.cprint(t[i].box,1,7,"Tank 1: ","white","gray")
-    f.cprint(t[i].box,1,8,"Tank 2: ","white","gray")
-    f.cprint(t[i].box,1,9,"Input limit: ","white","gray")
+    f.cprint(t[i].box,1,6,"Tank 1: ","white","gray")
+    f.cprint(t[i].box,1,7,"Tank 2: ","white","gray")
+    f.cprint(t[i].box,1,8,"Input limit: ","white","gray")
+    f.cprint(t[i].box,1,9,"Steam flow: ","white","gray")
     f.cprint(t[i].box,1,10,"Turbine ID: ","white","gray")
     if dT[i].getActive then
       strbox1 = "Online" cbox1 = "lime"
@@ -65,17 +65,16 @@ for i=1,nT do
     f.centerTextRight(t[i].box,3,flow.." kRF/t","yellow","gray")
     f.centerTextRight(t[i].box,4,stored.." RF","red","gray")
     f.centerTextRight(t[i].box,5,dT[i].getBladeEfficiency.." %","lightBlue","gray")
-    f.centerTextRight(t[i].box,6,dT[i].getFluidFlowRate.." mb/t","lightBlue","gray")
-    f.centerTextRight(t[i].box,7,tk1.." mb","pink","gray")
-    f.centerTextRight(t[i].box,8,tk2.." mb","pink","gray")
-    f.centerTextRight(t[i].box,9,dT[i].getFluidFlowRateMax.." mb/t","lightBlue","gray")
+    f.centerTextRight(t[i].box,6,tk1.." mb","pink","gray")
+    f.centerTextRight(t[i].box,7,tk2.." mb","pink","gray")
+    f.centerTextRight(t[i].box,8,dT[i].getFluidFlowRateMax.." mb/t","lightBlue","gray")
+    f.centerTextRight(t[i].box,9,dT[i].getFluidFlowRate.." mb/t","lightBlue","gray")
     f.centerTextRight(t[i].box,10,tostring(dT[i].turbineID),"yellow","gray")
-    local tFlow = 0
-    for i,v in pairs(dT) do tFlow = tFlow + v.getEnergyProducedLastTick end
-    f.cprint(error_box,1,1,"Total production: "..tFlow.." RF/t","red","black")
   end}
-  t[i].b1.reset = {bg_color="lime"}
-  t[i].b2.reset = {bg_color="red"}
+  t[i].b1.reset = {bg_color="lime"} t[i].b1.pulse = {bg_color="lightBlue"}
+  t[i].b1.press = function() if not dT[i].getActive then t[i].b1.apply("pulse") sleep(0.2) t[i].b1.apply("reset") t[i].turnOn() end end
+  t[i].b2.reset = {bg_color="red"} t[i].b2.pulse = {bg_color="lightBlue"}
+  t[i].b2.press = function() if dT[i].getActive then t[i].b2.apply("pulse") sleep(0.2) t[i].b2.apply("reset") t[i].turnOff() end end
   t[i].widg1 = f.addWin(t[i],4,h-21,10,10)
   t[i].widg1.reset = {bg_color="black"}
   t[i].tank1 = f.addWin(t[i],3,h-10,5,9)
@@ -100,7 +99,7 @@ for i=1,nT do
   end}
 end
 error_box = f.addWin(m,1,h,w,2)
- 
+
 local img = {}
  
 for i=1,4 do
@@ -128,30 +127,61 @@ function wait()
     sleep(0.5)
   end
 end
- 
+
 e = {}
 dT = {}
- 
-while true do
-  for i=1,nT do
-    t[i].apply("reset")
-    dT[i] = {}
-    rednet.broadcast("getData",i)
-    e = {rednet.receive(0.05)}
-    if e[2] ~= nil then
-      dT[i] = textutils.unserialise(e[2])
-      term.redirect(t[i])
-      term.setCursorPos(1,9)
-      --print(e[2])
-      --print(textutils.serialise(dT[i]))
-      t[i].tank1.apply("reset")
-      t[i].tank2.apply("reset")
-      t[i].box.apply("reset")
-      t[i].b1.apply("reset")
-      t[i].b2.apply("reset")
-    else
-      f.centerText(t[i],8,"Signal lost!","red")
+
+function main()
+  while true do
+    for i=1,nT do
+      t[i].apply("reset")
+      dT[i] = {}
+      rednet.broadcast("getData",i)
+      e = {rednet.receive(0.05)}
+      if e[2] ~= nil then
+        dT[i] = textutils.unserialise(e[2])
+        term.redirect(t[i])
+        term.setCursorPos(1,9)
+        --print(e[2])
+        --print(textutils.serialise(dT[i]))
+        t[i].tank1.apply("reset")
+        t[i].tank2.apply("reset")
+        t[i].box.apply("reset")
+        t[i].b1.apply("reset")
+        t[i].b2.apply("reset")
+      else
+        f.centerText(t[i],8,"Signal lost!","red")
+      end
+    end
+    local tFlow = 0
+    for i,v in pairs(dT) do tFlow = tFlow + v.getEnergyProducedLastTick end
+    f.cprint(error_box,1,1,"Total production: "..tFlow.." RF/t","red","black")
+    wait()
+  end
+end
+
+function buttonHandler()
+  while true do
+    local e = {os.pullEvent()}
+    if use_monitor and e[1] == "monitor_touch" then
+      local x,y = e[2],e[3]
+      for i,v in pairs(t) do
+        if t[i].b1.isClicked(x,y) then
+          t[i].b1.press()
+        elseif t[i].b2.isClicked(x,y) then
+          t[i].b2.press()
+        elseif t[i].b3.isClicked(x,y) then
+          t[i].b3.press()
+        elseif t[i].b4.isClicked(x,y) then
+          t[i].b4.press()
+        elseif t[i].b5.isClicked(x,y) then
+          t[i].b5.press()
+        elseif t[i].b6.isClicked(x,y) then
+          t[i].b6.press()
+        end
+      end
     end
   end
-  wait()
 end
+  
+parallel.waitForAll(main(),buttonHandler())

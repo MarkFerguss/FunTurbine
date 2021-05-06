@@ -30,6 +30,7 @@ for i=1,nT do
     f.centerText(t[i],1,"Turbine "..i,"yellow")
   end}
   j,k = t[i].size[1],t[i].size[2]
+  t[i].box = f.addWin(t[i],3,3,j-5,10)
   t[i].box.reset = {bg_color="gray",printText = function()
     f.cprint(t[i].box,1,1,"Status: ","white","gray")
     f.cprint(t[i].box,16,1,"I: ","white","gray")
@@ -72,7 +73,6 @@ for i=1,nT do
   t[i].turnOff = function() rednet.broadcast("turnOff",i) end
   t[i].InductorOn = function() rednet.broadcast("inductorOn",i) end
   t[i].InductorOff = function() rednet.broadcast("inductorOff",i) end
-  t[i].box = f.addWin(t[i],3,3,j-5,10)
   t[i].b1 = f.addWin(t[i],3,14,4,1)
   t[i].b2 = f.addWin(t[i],11,14,4,1)
   t[i].b3 = f.addWin(t[i],19,14,4,1)

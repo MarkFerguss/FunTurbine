@@ -110,9 +110,11 @@ function setWindows()
     t[i].b3.press = function() if not dT[i].getInductorEngaged then t[i].b3.apply("pulse") sleep(0.2) t[i].b3.apply("reset") t[i].InductorOn() end end
     t[i].b4.reset = {bg_color="red"} t[i].b4.pulse = {bg_color="lightBlue"}
     t[i].b4.press = function() if dT[i].getInductorEngaged then t[i].b4.apply("pulse") sleep(0.2) t[i].b4.apply("reset") t[i].InductorOff() end end
-    t[i].b5.reset = {bg_color="lime"} t[i].b5.pulse = {bg_color="lightBlue"}
+    t[i].b5.reset = {bg_color="gray", printText = function t[i].b5.write([[<<<]]) end}
+    t[i].b5.pulse = {bg_color="lightBlue"}
     t[i].b5.press = function(n) if dT[i].getFluidFlowRateMax > 0 then t[i].b5.apply("pulse") sleep(0.2) t[i].b5.apply("reset") t[i].rod(n) end end
-    t[i].b6.reset = {bg_color="red"} t[i].b6.pulse = {bg_color="lightBlue"}
+    t[i].b6.reset = {bg_color="gray", printText = function t[i].b6.write([[>>>]]) end}
+    t[i].b6.pulse = {bg_color="lightBlue"}
     t[i].b6.press = function(n) if dT[i].getFluidFlowRateMax < 2000 then t[i].b6.apply("pulse") sleep(0.2) t[i].b6.apply("reset") t[i].rod(n) end end
     t[i].widg1 = f.addWin(t[i],4,h-21,10,10)
     t[i].widg1.reset = {bg_color="black"}
@@ -181,6 +183,8 @@ function main()
         t[i].b2.apply("reset")
         t[i].b3.apply("reset")
         t[i].b4.apply("reset")
+        t[i].b5.apply("reset")
+        t[i].b6.apply("reset")
       else
         f.centerText(t[i],8,"Signal lost!","red")
       end
@@ -202,8 +206,8 @@ function buttonHandler()
     if use_monitor and e[1] == "monitor_touch" then
       local x,y = e[3],e[4]
       for i,v in pairs(t) do
-        t[i].temp1 {t[i].b5.isClicked(x,y)}
-        t[i].temp2 {t[i].b6.isClicked(x,y)}
+        t[i].temp1 = {t[i].b5.isClicked(x,y)}
+        t[i].temp2 = {t[i].b6.isClicked(x,y)}
         if t[i].b1.isClicked(x,y) then
           t[i].b1.press()
         elseif t[i].b2.isClicked(x,y) then

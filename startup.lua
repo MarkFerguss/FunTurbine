@@ -4,6 +4,17 @@ local nT = 3
 local t = {}
 local dT = {}
 
+local strbox3 = [[
+v
+v
+v
+]]
+local strbox4 = [[
+^
+^
+^
+]]
+
 -- INIT : Import images
 
 local img = {}
@@ -100,8 +111,8 @@ function setWindows()
     t[i].b2 = f.addWin(t[i],11,14,4,1)
     t[i].b3 = f.addWin(t[i],19,14,4,1)
     t[i].b4 = f.addWin(t[i],27,14,4,1)
-    t[i].b5 = f.addWin(t[i],19,16,4,1)
-    t[i].b6 = f.addWin(t[i],27,16,4,1)
+    t[i].b5 = f.addWin(t[i],19,16,1,3)
+    t[i].b6 = f.addWin(t[i],27,16,1,3)
     t[i].b1.reset = {bg_color="lime"} t[i].b1.pulse = {bg_color="lightBlue"}
     t[i].b1.press = function() if not dT[i].getActive then t[i].b1.apply("pulse") sleep(0.2) t[i].b1.apply("reset") t[i].turnOn() end end
     t[i].b2.reset = {bg_color="red"} t[i].b2.pulse = {bg_color="lightBlue"}
@@ -110,10 +121,10 @@ function setWindows()
     t[i].b3.press = function() if not dT[i].getInductorEngaged then t[i].b3.apply("pulse") sleep(0.2) t[i].b3.apply("reset") t[i].InductorOn() end end
     t[i].b4.reset = {bg_color="red"} t[i].b4.pulse = {bg_color="lightBlue"}
     t[i].b4.press = function() if dT[i].getInductorEngaged then t[i].b4.apply("pulse") sleep(0.2) t[i].b4.apply("reset") t[i].InductorOff() end end
-    t[i].b5.reset = {bg_color="gray", printText = function() f.cprint(t[i].b5,1,1,[[<<<]],"white","gray") end}
+    t[i].b5.reset = {bg_color="gray", printText = function() f.cprint(t[i].b5,1,1,strbox3,"white","gray") end}
     t[i].b5.pulse = {bg_color="lightBlue"}
     t[i].b5.press = function(n) if dT[i].getFluidFlowRateMax > 0 then t[i].b5.apply("pulse") sleep(0.2) t[i].b5.apply("reset") t[i].rod(n) end end
-    t[i].b6.reset = {bg_color="gray", printText = function() f.cprint(t[i].b6,1,1,[[>>>]],"white","gray") end}
+    t[i].b6.reset = {bg_color="gray", printText = function() f.cprint(t[i].b6,1,1,strbox4,"white","gray") end}
     t[i].b6.pulse = {bg_color="lightBlue"}
     t[i].b6.press = function(n) if dT[i].getFluidFlowRateMax < 2000 then t[i].b6.apply("pulse") sleep(0.2) t[i].b6.apply("reset") t[i].rod(n) end end
     t[i].widg1 = f.addWin(t[i],4,h-21,10,10)

@@ -97,7 +97,7 @@ function setWindows()
     t[i].turnOff = function() rednet.broadcast("turnOff",i) end
     t[i].InductorOn = function() rednet.broadcast("inductorOn",i) end
     t[i].InductorOff = function() rednet.broadcast("inductorOff",i) end
-    t[i].rod = function(n) nN = tonumber(n) if nN >= 2000 then nN = 200 end rednet.broadcast(nN,i) end
+    t[i].rod = function(n) nN = tonumber(n) if nN >= 2000 then nN = 2000 elseif nN < 0 then nN = 0 end rednet.broadcast(nN,i) end
     t[i].b1 = f.addWin(t[i],3,14,4,1)
     t[i].b2 = f.addWin(t[i],11,14,4,1)
     t[i].b3 = f.addWin(t[i],19,14,4,1)

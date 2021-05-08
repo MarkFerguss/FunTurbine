@@ -225,9 +225,9 @@ function buttonHandler()
         elseif t[i].b4.isClicked(x,y) then
           t[i].b4.press()
         elseif t[i].temp1[1] then
-          t[i].b5.press(dT[i].getFluidFlowRateMax - 10 * t[i].temp1[3]
+          t[i].b5.press(dT[i].getFluidFlowRateMax - 10 * t[i].temp1[3])
         elseif t[i].temp2[1] then
-          t[i].b6.press(dT[i].getFluidFlowRateMax + 10 * t[i].temp2[3]
+          t[i].b6.press(dT[i].getFluidFlowRateMax + 10 * t[i].temp2[3])
         end
       end
     end

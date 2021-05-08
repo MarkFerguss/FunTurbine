@@ -90,8 +90,8 @@ function setWindows()
       f.centerTextRight(t[i].box,8,dT[i].getFluidFlowRateMax.." mb/t","lightBlue","gray")
       f.centerTextRight(t[i].box,9,dT[i].getFluidFlowRate.." mb/t","lightBlue","gray")
       f.centerTextRight(t[i].box,10,tostring(dT[i].turbineID),"yellow","gray")
-      if dT[i].getFluidFlowRate ~= 0 then f.drawLine(t[i],17,h-1,28-17,"lightGray")
-      else f.drawLine(t[i],17,h-1,28-17,"gray") end
+      if dT[i].getFluidFlowRate ~= 0 then f.drawLine(t[i],17,h-1,15,"lightGray")
+      else f.drawLine(t[i],17,h-1,15,"gray") end
     end}
     t[i].turnOn = function() rednet.broadcast("turnOn",i) end
     t[i].turnOff = function() rednet.broadcast("turnOff",i) end
@@ -104,7 +104,7 @@ function setWindows()
     t[i].b4 = f.addWin(t[i],27,14,4,1)
     t[i].b5 = f.addWin(t[i],17,h-10,3,7)
     t[i].b6 = f.addWin(t[i],28,h-10,3,7)
-    t[i].box2 = f.addWin(t[i],22,h-8,4,3)
+    t[i].box2 = f.addWin(t[i],21,h-7,6,5)
     t[i].b1.reset = {bg_color="lime"} t[i].b1.pulse = {bg_color="lightBlue"}
     t[i].b1.press = function() if not dT[i].getActive then t[i].b1.apply("pulse") sleep(0.2) t[i].b1.apply("reset") t[i].turnOn() end end
     t[i].b2.reset = {bg_color="red"} t[i].b2.pulse = {bg_color="lightBlue"}
@@ -120,8 +120,8 @@ function setWindows()
     t[i].b6.pulse = {bg_color="lightBlue"}
     t[i].b6.press = function(n) if dT[i].getFluidFlowRateMax < 2000 then t[i].b6.apply("pulse") sleep(0.2) t[i].b6.apply("reset") t[i].rod(n) end end
     t[i].box2.reset = {bg_color="gray",printText = function()
-      f.cprint(t[i].box2,1,1,tostring(dT[i].getFluidFlowRate),"white","gray")
-      f.cprint(t[i].box2,1,3,"2000","white","gray")
+      f.cprint(t[i].box2,2,2,tostring(dT[i].getFluidFlowRate),"lightGray","gray")
+      f.cprint(t[i].box2,2,4,"2000","lightGray","gray")
     end}
     t[i].widg1 = f.addWin(t[i],4,h-21,10,10)
     t[i].widg1.reset = {bg_color="black"}

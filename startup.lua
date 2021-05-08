@@ -117,19 +117,18 @@ function setWindows()
       t[i].box3.setTextColor(colors.lightGray)
       t[i].box3.setCursorPos(1,1)
       print([[
-T battery is
-fully charged
--        
-T receives no
-liquid steam
--
-T's currently
-off process]])
-      if dT[i].getEnergyStored == 10^6 then t[i].led[1].apply("on") t[i].turnOff() else t[i].led[1].apply("reset") end
-      if dT[i].getInputAmount == 0 then t[i].led[2].apply("on") else t[i].led[2].apply("reset") end
+ battery is
+ fully charged
+
+ receiving no
+ liquid steam
+
+ T's currently
+ turned off]])
+      if tonumber(dT[i].getEnergyStored) == 10^6 then t[i].led[1].apply("on") else t[i].led[1].apply("reset") end
+      if tonumber(dT[i].getFluidFlowRate) < 100 then t[i].led[2].apply("on") else t[i].led[2].apply("reset") end
       if not dT[i].getActive then t[i].led[3].apply("on") else t[i].led[3].apply("reset") end
     end}
-    
     t[i].b1.reset = {bg_color="lime"} t[i].b1.pulse = {bg_color="lightBlue"}
     t[i].b1.press = function() if not dT[i].getActive then t[i].b1.apply("pulse") sleep(0.2) t[i].b1.apply("reset") t[i].turnOn() end end
     t[i].b2.reset = {bg_color="red"} t[i].b2.pulse = {bg_color="lightBlue"}
@@ -218,6 +217,7 @@ function main()
         t[i].b5.apply("reset")
         t[i].b6.apply("reset")
         t[i].box2.apply("reset")
+        t[i].box3.apply("reset")
       else
         f.centerText(t[i],8,"Signal lost!","red")
       end

@@ -95,7 +95,7 @@ function setWindows()
     t[i].turnOff = function() rednet.broadcast("turnOff",i) end
     t[i].InductorOn = function() rednet.broadcast("inductorOn",i) end
     t[i].InductorOff = function() rednet.broadcast("inductorOff",i) end
-    t[i].rod = function(n) rednet.broadcast(n,i) end
+    t[i].rod = function(n) rednet.broadcast(tonumber(n),i) end
     t[i].b1 = f.addWin(t[i],3,14,4,1)
     t[i].b2 = f.addWin(t[i],11,14,4,1)
     t[i].b3 = f.addWin(t[i],19,14,4,1)
@@ -217,7 +217,7 @@ function buttonHandler()
         elseif t[i].b4.isClicked(x,y) then
           t[i].b4.press()
         elseif t[i].temp1[1] then
-          t[i].b5.press(dT[i].getFluidFlowRateMax+ 1 * 10^(t[i].temp1[2]-1))
+          t[i].b5.press(dT[i].getFluidFlowRateMax - 1 * 10^(t[i].temp1[2]-1))
         elseif t[i].temp2[1] then
           t[i].b6.press(dT[i].getFluidFlowRateMax+ 1 * 10^(t[i].temp2[2]-1))
         end

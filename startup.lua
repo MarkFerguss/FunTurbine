@@ -49,9 +49,16 @@ function setWindows()
   for i=1,nT do
     t[i] = f.addWin(m,x3*(i-1)+1,1,w/3,h)
     t[i].reset = {bg_color="black", printText = function()
+      j,k = t[i].size[1],t[i].size[2]
+      t[i].setTextColor(colors.gray)
+      for a=1,j do
+        for b=1,k do
+          t[i].setCursorPos(a,b)
+          t[i].write("%")
+        end
+       end
       f.centerText(t[i],1,"Turbine "..i,"yellow")
     end}
-    j,k = t[i].size[1],t[i].size[2]
     t[i].box = f.addWin(t[i],3,3,j-5,10)
     t[i].box.reset = {bg_color="gray",printText = function()
       f.cprint(t[i].box,1,1,"Status: ","white","gray")
@@ -178,6 +185,9 @@ function setWindows()
     t[i].battery = f.addWin(t[i],16,h-10,10,1)
   end
   error_box = f.addWin(m,1,h,w,2)
+  for i=1,nT do
+    t[i].apply("reset")
+  end
 end
 
 function wait()
@@ -204,7 +214,7 @@ function main()
     for i=1,nT do
       t[i].apply("reset")
       getInfos(i)
-      if dT[i] ~= nil then
+      if dT[i] ~= nil ot dT ~= {} then
         term.redirect(t[i])
         term.setCursorPos(1,9)
         t[i].box.apply("reset")

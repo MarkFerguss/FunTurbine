@@ -109,9 +109,9 @@ function setWindows()
     t[i].b1.press = function() if not dT[i].getActive then t[i].b1.apply("pulse") sleep(0.2) t[i].b1.apply("reset") t[i].turnOn() end end
     t[i].b2.reset = {bg_color="red"} t[i].b2.pulse = {bg_color="lightBlue"}
     t[i].b2.press = function() if dT[i].getActive then t[i].b2.apply("pulse") sleep(0.2) t[i].b2.apply("reset") t[i].turnOff() end end
-    t[i].b3.reset = {bg_color="lime"} t[i].b3.pulse = {bg_color="lightBlue"}
+    t[i].b3.reset = {bg_color="cyan"} t[i].b3.pulse = {bg_color="lightBlue"}
     t[i].b3.press = function() if not dT[i].getInductorEngaged then t[i].b3.apply("pulse") sleep(0.2) t[i].b3.apply("reset") t[i].InductorOn() end end
-    t[i].b4.reset = {bg_color="red"} t[i].b4.pulse = {bg_color="lightBlue"}
+    t[i].b4.reset = {bg_color="orange"} t[i].b4.pulse = {bg_color="lightBlue"}
     t[i].b4.press = function() if dT[i].getInductorEngaged then t[i].b4.apply("pulse") sleep(0.2) t[i].b4.apply("reset") t[i].InductorOff() end end
     t[i].b5.reset = {bg_color="gray", printText = function() for k=1,3 do f.cprint(t[i].b5,2,2*k,"v","white","gray") end end}
     t[i].b5.pulse = {bg_color="lightBlue"}

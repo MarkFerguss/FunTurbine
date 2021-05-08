@@ -112,10 +112,10 @@ function setWindows()
     t[i].b5 = f.addWin(t[i],17,h-10,3,7)
     t[i].b6 = f.addWin(t[i],28,h-10,3,7)
     t[i].box2 = f.addWin(t[i],21,h-9,6,5)
-    t[i].box3 = f.addWin(t[i],17,h-21,14,h-12)
+    t[i].box3 = f.addWin(t[i],17,h-21,14,9)
     t[i].led = {}
     for _l=0,2 do
-      t[i].led[_l+1] = f.addWin(t[i],16,h-21+(3*_l+1),1,2)
+      t[i].led[_l+1] = f.addWin(t[i],16,h-21+(3*_l),1,2)
       t[i].led[_l+1].reset = {bg_color="lightGray"}
       t[i].led[_l+1].on = {bg_color="red"}
     end
@@ -212,7 +212,6 @@ end
 function main()
   while true do
     for i=1,nT do
-      t[i].apply("reset")
       getInfos(i)
       if dT[i] ~= nil or dT[i] ~= {} then
         term.redirect(t[i])

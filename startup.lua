@@ -90,8 +90,8 @@ function setWindows()
       f.centerTextRight(t[i].box,8,dT[i].getFluidFlowRateMax.." mb/t","lightBlue","gray")
       f.centerTextRight(t[i].box,9,dT[i].getFluidFlowRate.." mb/t","lightBlue","gray")
       f.centerTextRight(t[i].box,10,tostring(dT[i].turbineID),"yellow","gray")
-      if dT[i].getFluidFlowRate ~= 0 then f.drawLine(t[i],17,h-1,14,"lightGray")
-      else f.drawLine(t[i],17,h-1,14,"gray") end
+      if dT[i].getFluidFlowRate ~= 0 then f.drawLine(t[i],17,h-2,14,"lightGray")
+      else f.drawLine(t[i],17,h-2,14,"gray") end
     end}
     t[i].turnOn = function() rednet.broadcast("turnOn",i) end
     t[i].turnOff = function() rednet.broadcast("turnOff",i) end
@@ -225,9 +225,9 @@ function buttonHandler()
         elseif t[i].b4.isClicked(x,y) then
           t[i].b4.press()
         elseif t[i].temp1[1] then
-          t[i].b5.press(dT[i].getFluidFlowRateMax - 10 * t[i].temp1[3])
+          t[i].b5.press(dT[i].getFluidFlowRateMax - 10^(t[i].temp1[3]/2)
         elseif t[i].temp2[1] then
-          t[i].b6.press(dT[i].getFluidFlowRateMax + 10 * t[i].temp2[3])
+          t[i].b6.press(dT[i].getFluidFlowRateMax + 10^((7-t[i].temp2[3])/2)
         end
       end
     end

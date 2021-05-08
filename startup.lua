@@ -133,7 +133,7 @@ function setWindows()
       local tk1 = dT[i].getInputAmount
       local h = math.floor((tonumber(tk1)/4000)*8)
       f.drawBox(t[i].tank1,2,(9-h),5,8,"lightGray")
-      if not h == 0 then
+      if h > 0 then
         f.cprint(t[i].tank1,2,9-h,tostring(tk1/1000),"gray","lightGray")
       end
       term.redirect(error_box)
@@ -146,7 +146,7 @@ function setWindows()
       local tk2 = dT[i].getOutputAmount
       local h = math.floor((tonumber(tk2)/4000)*8)
       f.drawBox(t[i].tank2,2,(9-h),5,8,"lightBlue")
-      if not h == 0 then
+      if h > 0 then
         f.cprint(t[i].tank2,2,9-h,tostring(tk2/1000),"gray","lightBlue")
       end
       term.redirect(error_box)

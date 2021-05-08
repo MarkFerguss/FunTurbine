@@ -214,7 +214,7 @@ function main()
     for i=1,nT do
       t[i].apply("reset")
       getInfos(i)
-      if dT[i] ~= nil ot dT ~= {} then
+      if dT[i] ~= nil or dT[i] ~= {} then
         term.redirect(t[i])
         term.setCursorPos(1,9)
         t[i].box.apply("reset")
@@ -246,6 +246,7 @@ end
 function buttonHandler()
   while true do
     local e = {os.pullEvent()}
+    if e[1] == "peripheral_detach" or e[1] == "peripheral" or e[1] == "monitor_resize" then periphs() setWindows() end
     if use_monitor and e[1] == "monitor_touch" then
       local x,y = e[3],e[4]
       for i,v in pairs(t) do

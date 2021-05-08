@@ -95,12 +95,13 @@ function setWindows()
     t[i].turnOff = function() rednet.broadcast("turnOff",i) end
     t[i].InductorOn = function() rednet.broadcast("inductorOn",i) end
     t[i].InductorOff = function() rednet.broadcast("inductorOff",i) end
+    t[i].rod = function(n) rednet.broadcast(n,i) end
     t[i].b1 = f.addWin(t[i],3,14,4,1)
     t[i].b2 = f.addWin(t[i],11,14,4,1)
     t[i].b3 = f.addWin(t[i],19,14,4,1)
     t[i].b4 = f.addWin(t[i],27,14,4,1)
-    --t[i].b5 = f.addWin(t[i],3,14,4,1)
-    --t[i].b6 = f.addWin(t[i],11,14,4,1)
+    t[i].b5 = f.addWin(t[i],19,16,4,1)
+    t[i].b6 = f.addWin(t[i],27,16,4,1)
     t[i].b1.reset = {bg_color="lime"} t[i].b1.pulse = {bg_color="lightBlue"}
     t[i].b1.press = function() if not dT[i].getActive then t[i].b1.apply("pulse") sleep(0.2) t[i].b1.apply("reset") t[i].turnOn() end end
     t[i].b2.reset = {bg_color="red"} t[i].b2.pulse = {bg_color="lightBlue"}
@@ -109,10 +110,10 @@ function setWindows()
     t[i].b3.press = function() if not dT[i].getInductorEngaged then t[i].b3.apply("pulse") sleep(0.2) t[i].b3.apply("reset") t[i].InductorOn() end end
     t[i].b4.reset = {bg_color="red"} t[i].b4.pulse = {bg_color="lightBlue"}
     t[i].b4.press = function() if dT[i].getInductorEngaged then t[i].b4.apply("pulse") sleep(0.2) t[i].b4.apply("reset") t[i].InductorOff() end end
-    --t[i].b5.reset = {bg_color="lime"} t[i].b5.pulse = {bg_color="lightBlue"}
-    --t[i].b5.press = function() if not dT[i].getActive then t[i].b5.apply("pulse") sleep(0.2) t[i].b5.apply("reset") t[i].turnOn() end end
-    --t[i].b6.reset = {bg_color="red"} t[i].b6.pulse = {bg_color="lightBlue"}
-    --t[i].b6.press = function() if dT[i].getActive then t[i].b6.apply("pulse") sleep(0.2) t[i].b6.apply("reset") t[i].turnOff() end end
+    t[i].b5.reset = {bg_color="lime"} t[i].b5.pulse = {bg_color="lightBlue"}
+    t[i].b5.press = function(n) if dT[i].getFluidFlowRateMax > 0 then t[i].b5.apply("pulse") sleep(0.2) t[i].b5.apply("reset") t[i].rod(n) end end
+    t[i].b6.reset = {bg_color="red"} t[i].b6.pulse = {bg_color="lightBlue"}
+    t[i].b6.press = function(n) if dT[i].getFluidFlowRateMax < 2000 then t[i].b6.apply("pulse") sleep(0.2) t[i].b6.apply("reset") t[i].rod(n) end end
     t[i].widg1 = f.addWin(t[i],4,h-21,10,10)
     t[i].widg1.reset = {bg_color="black"}
     t[i].tank1 = f.addWin(t[i],3,h-10,5,9)
@@ -201,6 +202,8 @@ function buttonHandler()
     if use_monitor and e[1] == "monitor_touch" then
       local x,y = e[3],e[4]
       for i,v in pairs(t) do
+        t[i].temp1 {t[i].b5.isClicked(x,y)}
+        t[i].temp2 {t[i].b6.isClicked(x,y)}
         if t[i].b1.isClicked(x,y) then
           t[i].b1.press()
         elseif t[i].b2.isClicked(x,y) then
@@ -209,10 +212,10 @@ function buttonHandler()
           t[i].b3.press()
         elseif t[i].b4.isClicked(x,y) then
           t[i].b4.press()
-        elseif t[i].b5.isClicked(x,y) then
-          t[i].b5.press()
-        elseif t[i].b6.isClicked(x,y) then
-          t[i].b6.press()
+        elseif t[i].temp1[1] then
+          t[i].b5.press(dT[i].getFluidFlowRateMax+ 1 * 10^(t[i].temp1[2]-1)
+        elseif t[i].temp2[1] then
+          t[i].b6.press(dT[i].getFluidFlowRateMax+ 1 * 10^(t[i].temp2[2]-1)
         end
       end
     end
@@ -220,6 +223,6 @@ function buttonHandler()
 end
 
 periphs()
-getInfos(1),getInfos(2),getInfos(3)
+getInfos(1) getInfos(2) getInfos(3)
 setWindows()
 parallel.waitForAll(buttonHandler,main)

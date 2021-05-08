@@ -110,10 +110,10 @@ function setWindows()
     t[i].b3.press = function() if not dT[i].getInductorEngaged then t[i].b3.apply("pulse") sleep(0.2) t[i].b3.apply("reset") t[i].InductorOn() end end
     t[i].b4.reset = {bg_color="red"} t[i].b4.pulse = {bg_color="lightBlue"}
     t[i].b4.press = function() if dT[i].getInductorEngaged then t[i].b4.apply("pulse") sleep(0.2) t[i].b4.apply("reset") t[i].InductorOff() end end
-    t[i].b5.reset = {bg_color="gray", printText = function t[i].b5.write([[<<<]]) end}
+    t[i].b5.reset = {bg_color="gray", printText = function() f.cprint(t[i].b5,1,1,[[<<<]],"white","gray") end}
     t[i].b5.pulse = {bg_color="lightBlue"}
     t[i].b5.press = function(n) if dT[i].getFluidFlowRateMax > 0 then t[i].b5.apply("pulse") sleep(0.2) t[i].b5.apply("reset") t[i].rod(n) end end
-    t[i].b6.reset = {bg_color="gray", printText = function t[i].b6.write([[>>>]]) end}
+    t[i].b6.reset = {bg_color="gray", printText = function() f.cprint(t[i].b6,1,1,[[>>>]],"white","gray") end}
     t[i].b6.pulse = {bg_color="lightBlue"}
     t[i].b6.press = function(n) if dT[i].getFluidFlowRateMax < 2000 then t[i].b6.apply("pulse") sleep(0.2) t[i].b6.apply("reset") t[i].rod(n) end end
     t[i].widg1 = f.addWin(t[i],4,h-21,10,10)

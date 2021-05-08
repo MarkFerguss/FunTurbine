@@ -225,7 +225,7 @@ function main()
     local tFlow = 0
     for i,v in pairs(dT) do
       if v ~= nil or v ~= {} then
-        tFlow = tFlow + t[i].flow
+        tFlow = tFlow + math.floor(dT[i].getEnergyProducedLastTick) * 0.001
       end
     end
     f.cprint(error_box,1,1,"Total production: "..tFlow.." RF/t","red","black")

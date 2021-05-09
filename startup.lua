@@ -213,7 +213,9 @@ function main()
   while true do
     for i=1,nT do
       getInfos(i)
-      if dT[i] ~= nil or dT[i] ~= {} then
+      if dT[i] == nil or dT[i] == {} then
+        f.centerText(t[i],8,"Signal lost!","red")
+      else
         term.redirect(t[i])
         term.setCursorPos(1,9)
         t[i].box.apply("reset")
@@ -227,8 +229,6 @@ function main()
         t[i].b6.apply("reset")
         t[i].box2.apply("reset")
         t[i].box3.apply("reset")
-      else
-        f.centerText(t[i],8,"Signal lost!","red")
       end
     end
     local tFlow = 0

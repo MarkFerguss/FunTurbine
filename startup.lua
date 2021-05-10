@@ -3,17 +3,18 @@ os.loadAPI("/f")
 local nT = 3
 local t = {}
 local dT = {}
+local use_grid = false
 
 -- INIT : Import images
 
 local img = {}
-tank = paintutils.loadImage("/tank")
+tank = paintutils.loadImage("/turbine/img/tank")
 for i=1,4 do
-  img[i] = paintutils.loadImage("to_"..tostring(i))
-  img[i+4] = paintutils.loadImage("t_"..tostring(i))
+  img[i] = paintutils.loadImage("/turbine/img/to_"..tostring(i))
+  img[i+4] = paintutils.loadImage("/turbine/img/t_"..tostring(i))
 end
-img_ti_1 = paintutils.loadImage("ti_1")
-img_ti_2 = paintutils.loadImage("ti_2")
+img_ti_1 = paintutils.loadImage("/turbine/img/ti_1")
+img_ti_2 = paintutils.loadImage("/turbine/img/ti_2")
 
 -- Define main functions
 
@@ -37,12 +38,10 @@ function periphs()
 end
 
 function getInfos(i)
-  dT[i] = {}
+  dT[i] = nil
   rednet.broadcast("getData",i)
   e = {rednet.receive(0.1)}
-  if e[2] ~= nil then
-    dT[i] = textutils.unserialise(e[2])
-  end
+  dT[i] = textutils.unserialise(e[2])
 end
 
 function setWindows()
@@ -51,12 +50,14 @@ function setWindows()
     t[i].reset = {bg_color="black", printText = function()
       j,k = t[i].size[1],t[i].size[2]
       t[i].setTextColor(colors.gray)
-      for a=1,j do
-        for b=1,k do
-          t[i].setCursorPos(a,b)
-          t[i].write("%")
+      if use_grid then
+        for a=1,j do
+          for b=1,k do
+            t[i].setCursorPos(a,b)
+            t[i].write("%")
+          end
         end
-       end
+      end
       f.centerText(t[i],1,"Turbine "..i,"yellow")
     end}
     t[i].box = f.addWin(t[i],3,3,j-5,10)
@@ -195,13 +196,12 @@ function wait()
     for i=1,nT do
       term.redirect(t[i].widg1)
       t[i].widg1.apply("reset")
-      if dT[i].getActive then
+      if dT[i] == nil then
+        paintutils.drawImage(img[1],1,1)
+      elseif dT[i].getActive then
           paintutils.drawImage(img[j+4],1,1)
       else
           paintutils.drawImage(img[j],1,1)
-      end
-      if dT[i] == {} then
-        paintutils.drawImage(img[1],1,1)
       end
     end
     term.redirect(error_box)
@@ -213,7 +213,7 @@ function main()
   while true do
     for i=1,nT do
       getInfos(i)
-      if dT[i] == nil or dT[i] == {} then
+      if dT[i] == nil then
         f.centerText(t[i],8,"Signal lost!","red")
       else
         term.redirect(t[i])
@@ -233,7 +233,7 @@ function main()
     end
     local tFlow = 0
     for i,v in pairs(dT) do
-      if v ~= nil or v ~= {} then
+      if not v == nil then
         tFlow = tFlow + math.floor(dT[i].getEnergyProducedLastTick) * 0.001
       end
     end

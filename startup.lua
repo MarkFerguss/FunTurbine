@@ -41,7 +41,7 @@ function getInfos(i)
   dT[i] = nil
   rednet.broadcast("getData",i)
   e = {rednet.receive(0.1)}
-  if not e[2] == nil then
+  if e[2] ~= nil then
     dT[i] = textutils.unserialise(e[2])
   end
 end
@@ -235,11 +235,11 @@ function main()
     end
     local tFlow = 0
     for i,v in pairs(dT) do
-      if not v == nil then
+      if v ~= nil then
         tFlow = tFlow + math.floor(dT[i].getEnergyProducedLastTick) * 0.001
       end
     end
-    f.cprint(error_box,1,1,"Total production: "..tFlow.." RF/t","red","black")
+    f.cprint(error_box,1,1,"Total production: "..tFlow.." kRF/t","red","black")
     wait()
   end
 end

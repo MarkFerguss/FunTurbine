@@ -41,7 +41,9 @@ function getInfos(i)
   dT[i] = nil
   rednet.broadcast("getData",i)
   e = {rednet.receive(0.1)}
-  dT[i] = textutils.unserialise(e[2])
+  if not e[2] == nil then
+    dT[i] = textutils.unserialise(e[2])
+  end
 end
 
 function setWindows()

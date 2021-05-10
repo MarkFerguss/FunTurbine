@@ -62,6 +62,7 @@ function setWindows()
       end
       f.centerText(t[i],1,"Turbine "..i,"yellow")
     end}
+    j,k = t[i].size[1],t[i].size[2]
     t[i].box = f.addWin(t[i],3,3,j-5,10)
     t[i].box.reset = {bg_color="gray",printText = function()
       f.cprint(t[i].box,1,1,"Status: ","white","gray")
